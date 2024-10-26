@@ -91,3 +91,73 @@ bisiesto a = (mod a 4 == 0) && ((mod a 100 /= 0) || (mod a 400 == 0))
 xor :: Bool -> Bool -> Bool
 xor x y = (x && not y) || (not x && y)
 
+
+-- Ejercicio 2.A
+divisores :: Int -> [Int]
+divisores x = reverse (filter (divisible_por x) (lista_posibles_divisores x))
+
+divisible_por :: Int -> Int -> Bool
+divisible_por x y = mod x y == 0
+
+lista_posibles_divisores :: Int -> [Int]
+lista_posibles_divisores x
+    | x == 1 = [(-1), 1]
+    | x > 1 = [(-x), x] ++ lista_posibles_divisores (x-1)
+    | x < -1 = [(-x), x] ++ lista_posibles_divisores (x+1)
+
+
+-- Ejercicio 2.B
+horas_minutos_segundos :: Int -> [Int]
+horas_minutos_segundos x = [h, m, s]
+    where
+        h = x `div` 3600
+        m = (x `mod` 3600) `div` 60
+        s = x `mod` 60
+
+
+-- Ejercicio 2.C
+primo :: Int -> Bool
+primo x = divisores x == [1, (-1), x, (-x)]
+
+
+-- Ejercicio 2.D
+nPrimes :: Int -> [Int]
+nPrimes x = filter primo [1 .. x]
+
+
+-- Ejercicio 2.E
+tomar :: Int -> [a] -> [a]
+tomar _ [] = []
+tomar n (x:xs)
+    | n == 0 = []
+    | n > 0 = [x] ++ (tomar (n-1) xs)
+
+
+-- Ejercicio 2.F
+tomarMientras :: (a -> Bool) -> [a] -> [a]
+tomarMientras p (x:xs)
+    | p x = [x] ++ tomarMientras p xs
+    | otherwise = []
+
+
+-- Ejercicio 2.G
+nIndex :: [a] -> Int -> a
+nIndex (x:xs) n
+    | n == 0 = x
+    | n > 0 && n < length (x:xs) = nIndex xs (n-1)
+
+
+-- Ejercicio 2.H
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' e (x:xs)
+    | x == e = True
+    | otherwise = elem' e xs
+
+
+-- Ejercicio 2.I
+dec2bin :: Int -> [Int]
+dec2bin x
+    | x `div` 2 == 0 = []
+    | otherwise = dec2bin (x `div` 2) ++ [x `mod` 2]
+
