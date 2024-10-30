@@ -354,4 +354,3 @@ letras (x:xs)
     | ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z') = x : letras xs
     | otherwise = letras xs
 
-

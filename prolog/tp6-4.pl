@@ -9,7 +9,7 @@ multirot(X, R) :-
 multirot(X, L) :-
   rotacion(X, R),
   append(R, Tail, L),
-  multirot(X, Tail), !.
+  multirot(X, Tail).
 
 rotacion(List, Rotated) :-
   append(Front, Back, List),
@@ -19,15 +19,22 @@ rotacion(List, Rotated) :-
 
 % 2. son_consecutivas(N,Xs)
 
-son_consecutivas(1,[1]).
-son_consecutivas(N,L) :-
-  N1 is N-1,
-  consecutivos(N,H),
-  son_consecutivas(N1,T),
-  append_front_or_back(H,T,L).
+son_consecutivas(N, L) :-
+    son_consecutivas_aux(N, L, []).
 
-consecutivos(N, 0, []) :- !.
-consecutivos(N, M, [N|T]) :- M > 0, M1 is M-1, consecutivos(N, M1, T).
+son_consecutivas_aux(0, [], _).
+son_consecutivas_aux(N, [H|T], Vistos) :-
+    N > 0, H =< N,
+    \+ elem(H, Vistos),
+    consecutivos(H, [H|T], T2),
+    son_consecutivas_aux(N, T2, [H|Vistos]).
 
-append_front_or_back(H,T,L) :- append(H,T,L).
-append_front_or_back(H,T,L) :- append(T,H,L).
+consecutivos(0, _, [], _).
+consecutivos(N, X, [X|T]) :-
+    N > 0,
+    N1 is N - 1,
+    consecutivos(N1, X, T).
+
+elem(X, [X|_]) :- !.
+elem(X, [_|T]) :- elem(X, T).
+
